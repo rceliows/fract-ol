@@ -1,6 +1,6 @@
 #include "../inc/main.h"
 
-t_complex	complex_add(t_complex a, t_complex b)
+t_complex	complex_add(const t_complex a, const t_complex b)
 {
 	t_complex	result;
 
@@ -9,7 +9,7 @@ t_complex	complex_add(t_complex a, t_complex b)
 	return (result);
 }
 
-t_complex	complex_square(t_complex a)
+t_complex	complex_square(const t_complex a)
 {
 	t_complex	result;
 
@@ -18,20 +18,29 @@ t_complex	complex_square(t_complex a)
 	return (result);
 }
 
-t_complex	pixel_to_complex_zoom(int x, int y, t_fractol *fractol)
+t_complex	complex_conjugate_square(const t_complex a)
+{
+	t_complex	result;
+
+	result.real = a.real * a.real - a.imag * a.imag;
+	result.imag = -2 * (a.real * a.imag);
+	return (result);
+}
+
+t_complex	pixel_to_complex_zoom(size_t x, size_t y, const t_fractol *fractol)
 {
 	t_complex	c;
 	double		range;
 
 	range = 4.0 / fractol->zoom;
-	c.real = (double)(x - fractol->width / 2)
-		* range / fractol->width + fractol->offset_x;
-	c.imag = (double)(y - fractol->height / 2)
-		* range / fractol->height + fractol->offset_y;
+	c.real = ((double)x - (double)(fractol->width / 2))
+		* range / (double)fractol->width + fractol->offset_x;
+	c.imag = ((double)y - (double)(fractol->height / 2))
+		* range / (double)fractol->height + fractol->offset_y;
 	return (c);
 }
 
-double	real_square(t_complex a)
+double	real_square(const t_complex a)
 {
 	return ((a.real * a.real) + (a.imag * a.imag));
 }

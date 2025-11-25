@@ -1,10 +1,36 @@
 #include "../inc/main.h"
 
-int	mandelbrot_iterations(t_complex a, int max_iterations)
+int	in_main_cardioid(const t_complex c)
+{
+	double	q;
+	double	p;
+
+	p = sqrt((c.real - 0.25) * (c.real - 0.25) + c.imag * c.imag);
+	if (c.real <= p - 2 * p * p + 0.25)
+		return (1);
+	q = (c.real + 1) * (c.real + 1) + c.imag * c.imag;
+	if (q <= 0.0625)
+		return (1);
+	return (0);
+}
+
+int	in_period_2_bulb(const t_complex c)
+{
+	double	q;
+
+	q = (c.real + 1) * (c.real + 1) + c.imag * c.imag;
+	if (q <= 0.0625)
+		return (1);
+	return (0);
+}
+
+int	mandelbrot_iterations(const t_complex a, int max_iterations)
 {
 	int			iterations;
 	t_complex	i;
 
+	if (in_main_cardioid(a) || in_period_2_bulb(a))
+		return (max_iterations);
 	iterations = 0;
 	i.real = 0.0;
 	i.imag = 0.0;
@@ -17,7 +43,7 @@ int	mandelbrot_iterations(t_complex a, int max_iterations)
 }
 
 static void	render_mandelbrot_pixel(t_fractol *fractol,
-			int x, int y, int max_iter)
+			size_t x, size_t y, int max_iter)
 {
 	t_complex	c;
 	int			iterations;
@@ -30,9 +56,9 @@ static void	render_mandelbrot_pixel(t_fractol *fractol,
 	set_pixel(fractol, x, y, color);
 }
 
-static void	render_mandelbrot_row(t_fractol *fractol, int y, int max_iter)
+static void	render_mandelbrot_row(t_fractol *fractol, size_t y, int max_iter)
 {
-	int	x;
+	size_t	x;
 
 	x = 0;
 	while (x < fractol->width)
@@ -44,8 +70,8 @@ static void	render_mandelbrot_row(t_fractol *fractol, int y, int max_iter)
 
 void	render_mandelbrot(t_fractol *fractol)
 {
-	int	y;
-	int	max_iter;
+	size_t	y;
+	int		max_iter;
 
 	y = 0;
 	max_iter = get_optimal_iterations(fractol->zoom);

@@ -36,10 +36,11 @@ void	init_fractol(t_fractol *fractol)
 	if (!fractol->mlx)
 		error_exit(fractol, 0);
 	fractol->win = mlx_new_window(fractol->mlx,
-			fractol->width, fractol->height, "Fract'ol");
+			(int)fractol->width, (int)fractol->height, "Fract'ol");
 	if (!fractol->win)
 		error_exit(fractol, 1);
-	fractol->img = mlx_new_image(fractol->mlx, fractol->width, fractol->height);
+	fractol->img = mlx_new_image(fractol->mlx,
+			(int)fractol->width, (int)fractol->height);
 	if (!fractol->img)
 		error_exit(fractol, 2);
 	fractol->img_data = mlx_get_data_addr(fractol->img,
@@ -52,6 +53,8 @@ void	render_fractal(t_fractol *fractol)
 		render_mandelbrot(fractol);
 	else if (fractol->fractal_type == JULIA)
 		render_julia(fractol);
+	else if (fractol->fractal_type == TRICORN)
+		render_tricorn(fractol);
 }
 
 int	get_optimal_iterations(double zoom)

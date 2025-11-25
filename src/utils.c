@@ -14,7 +14,7 @@ int	key_dispatcher(int keycode, t_fractol *fractol)
 	return (0);
 }
 
-int	ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	count;
 
@@ -30,7 +30,7 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[count] - s2[count]);
 }
 
-int	ft_strvalid(char *argv)
+int	ft_strvalid(const char *argv)
 {
 	size_t	i;
 	int		dot_count;

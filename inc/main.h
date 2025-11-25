@@ -8,6 +8,7 @@
 
 # define MANDELBROT 1
 # define JULIA 2
+# define TRICORN 3
 
 # define COLOR_CLASSIC 0
 # define COLOR_RAINBOW 1
@@ -29,8 +30,8 @@ typedef struct s_fractol
 	int				bits_per_pixel;
 	int				line_length;
 	int				endian;
-	int				width;
-	int				height;
+	size_t			width;
+	size_t			height;
 	int				max_iter;
 	int				fractal_type;
 	int				color_scheme;
@@ -46,20 +47,25 @@ typedef struct s_fractol
 }	t_fractol;
 
 // Mathematical Functions
-t_complex	complex_add(t_complex a, t_complex b);
-t_complex	complex_square(t_complex a);
-t_complex	pixel_to_complex_zoom(int x, int y, t_fractol *fractol);
-double		real_square(t_complex a);
+t_complex	complex_add(const t_complex a, const t_complex b);
+t_complex	complex_square(const t_complex a);
+t_complex	complex_conjugate_square(const t_complex a);
+t_complex	pixel_to_complex_zoom(size_t x, size_t y, const t_fractol *fractol);
+double		real_square(const t_complex a);
 
 // Fractal Algorithm Functions
-int			mandelbrot_iterations(t_complex c, int max_iterations);
-int			julia_iterations(t_complex i, t_complex c, int max_iterations);
+int			mandelbrot_iterations(const t_complex c, int max_iterations);
+int			julia_iterations(t_complex i, const t_complex c, int max_iterations);
+int			tricorn_iterations(const t_complex c, int max_iterations);
+int			in_main_cardioid(const t_complex c);
+int			in_period_2_bulb(const t_complex c);
 
 // Rendering Functions
 void		render_mandelbrot(t_fractol *fractol);
 void		render_julia(t_fractol *fractol);
+void		render_tricorn(t_fractol *fractol);
 void		render_fractal(t_fractol *fractol);
-void		set_pixel(t_fractol *fractol, int x, int y, int color);
+void		set_pixel(t_fractol *fractol, size_t x, size_t y, int color);
 
 //Color Functions
 int			get_color_advanced(int iterations, int max_iterations,
@@ -88,9 +94,9 @@ void		init_fractol(t_fractol *fractol);
 void		cleanup_fractol(t_fractol *fractol);
 
 // Utility Functions
-int			ft_strcmp(char *s1, char *s2);
-int			ft_strvalid(char *argv);
+int			ft_strcmp(const char *s1, const char *s2);
+int			ft_strvalid(const char *argv);
 int			get_optimal_iterations(double zoom);
-double		ft_atof(char *str);
+double		ft_atof(const char *str);
 
 #endif

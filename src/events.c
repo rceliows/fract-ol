@@ -29,11 +29,11 @@ int	handle_mouse(int button, int x, int y, t_fractol *fractol)
 		zoom_factor = 1.0 / 1.2;
 	else
 		return (0);
-	mouse_point = pixel_to_complex_zoom(x, y, fractol);
+	mouse_point = pixel_to_complex_zoom((size_t)x, (size_t)y, fractol);
 	fractol->zoom *= zoom_factor;
-	fractol->offset_x = mouse_point.real - (x - fractol->width / 2)
+	fractol->offset_x = mouse_point.real - (x - (int)(fractol->width / 2))
 		* (4.0 / fractol->zoom) / fractol->width;
-	fractol->offset_y = mouse_point.imag - (y - fractol->height / 2)
+	fractol->offset_y = mouse_point.imag - (y - (int)(fractol->height / 2))
 		* (4.0 / fractol->zoom) / fractol->height;
 	if (fractol->zoom > 1000000)
 		fractol->zoom = 1000000;

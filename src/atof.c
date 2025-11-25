@@ -1,6 +1,6 @@
 #include "../inc/main.h"
 
-static int	ft_parse_sign(char *str, int *i)
+static int	ft_parse_sign(const char *str, size_t *i)
 {
 	int	sign;
 
@@ -15,7 +15,7 @@ static int	ft_parse_sign(char *str, int *i)
 	return (sign);
 }
 
-static double	ft_parse_integer(char *str, int *i)
+static double	ft_parse_integer(const char *str, size_t *i)
 {
 	double	result;
 
@@ -28,10 +28,10 @@ static double	ft_parse_integer(char *str, int *i)
 	return (result);
 }
 
-static double	ft_parse_fraction(char *str, int *i)
+static double	ft_parse_fraction(const char *str, size_t *i)
 {
 	double		fraction;
-	int			decimal_places;
+	size_t		decimal_places;
 	size_t		j;
 
 	fraction = 0.0;
@@ -55,7 +55,7 @@ static double	ft_parse_fraction(char *str, int *i)
 	return (fraction);
 }
 
-double	ft_atof(char *str)
+double	ft_atof(const char *str)
 {
 	int			sign;
 	size_t		i;

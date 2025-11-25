@@ -19,11 +19,11 @@ int	get_color_advanced(int iterations, int max_iterations,
 		return (1);
 }
 
-void	set_pixel(t_fractol *fractol, int x, int y, int color)
+void	set_pixel(t_fractol *fractol, size_t x, size_t y, int color)
 {
 	char	*pixel_ptr;
 
-	if (x >= 0 && x < fractol->width && y >= 0 && y < fractol->height)
+	if (x < fractol->width && y < fractol->height)
 	{
 		pixel_ptr = fractol->img_data
 			+ (y * fractol->line_length + x * (fractol->bits_per_pixel / 8));

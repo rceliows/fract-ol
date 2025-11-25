@@ -1,13 +1,15 @@
 #include "../inc/main.h"
 
-void	available_options(char *program_name)
+void	available_options(const char *program_name)
 {
 	ft_printf("Available fractals:\n");
 	ft_printf("  mandelbrot\n");
 	ft_printf("  julia [real number] [imaginary number]\n");
+	ft_printf("  tricorn\n");
 	ft_printf("Examples:\n");
 	ft_printf("  %s mandelbrot\n", program_name);
 	ft_printf("  %s julia -0.7 0.27015\n", program_name);
+	ft_printf("  %s tricorn\n", program_name);
 }
 
 void	available_controls(void)
@@ -45,6 +47,8 @@ int	main(int argc, char **argv)
 	}
 	if (ft_strcmp(argv[1], "mandelbrot") == 0 && argc == 2)
 		fractol.fractal_type = MANDELBROT;
+	else if (ft_strcmp(argv[1], "tricorn") == 0 && argc == 2)
+		fractol.fractal_type = TRICORN;
 	else if (ft_strcmp(argv[1], "julia") == 0 && argc == 4
 		&& (ft_strvalid(argv[2]) && ft_strvalid(argv[3])))
 		prep_julia(argv, &fractol);

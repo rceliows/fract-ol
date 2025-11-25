@@ -1,6 +1,6 @@
 #include "../inc/main.h"
 
-int	julia_iterations(t_complex i, t_complex c, int max_iterations)
+int	julia_iterations(t_complex i, const t_complex c, int max_iterations)
 {
 	int	iterations;
 
@@ -13,7 +13,8 @@ int	julia_iterations(t_complex i, t_complex c, int max_iterations)
 	return (iterations);
 }
 
-static void	render_julia_pixel(t_fractol *fractol, int x, int y, int max_iter)
+static void	render_julia_pixel(t_fractol *fractol, size_t x,
+			size_t y, int max_iter)
 {
 	t_complex	z;
 	int			iterations;
@@ -26,9 +27,9 @@ static void	render_julia_pixel(t_fractol *fractol, int x, int y, int max_iter)
 	set_pixel(fractol, x, y, color);
 }
 
-static void	render_julia_row(t_fractol *fractol, int y, int max_iter)
+static void	render_julia_row(t_fractol *fractol, size_t y, int max_iter)
 {
-	int	x;
+	size_t	x;
 
 	x = 0;
 	while (x < fractol->width)
@@ -40,8 +41,8 @@ static void	render_julia_row(t_fractol *fractol, int y, int max_iter)
 
 void	render_julia(t_fractol *fractol)
 {
-	int	y;
-	int	max_iter;
+	size_t	y;
+	int		max_iter;
 
 	y = 0;
 	max_iter = get_optimal_iterations(fractol->zoom);
