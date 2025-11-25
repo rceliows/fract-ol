@@ -55,7 +55,8 @@ double		real_square(const t_complex a);
 
 // Fractal Algorithm Functions
 int			mandelbrot_iterations(const t_complex c, int max_iterations);
-int			julia_iterations(t_complex i, const t_complex c, int max_iterations);
+int			julia_iterations(t_complex i, const t_complex c,
+				int max_iterations);
 int			tricorn_iterations(const t_complex c, int max_iterations);
 int			in_main_cardioid(const t_complex c);
 int			in_period_2_bulb(const t_complex c);
