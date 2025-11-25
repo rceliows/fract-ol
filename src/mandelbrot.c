@@ -1,0 +1,58 @@
+#include "../inc/main.h"
+
+int	mandelbrot_iterations(t_complex a, int max_iterations)
+{
+	int			iterations;
+	t_complex	i;
+
+	iterations = 0;
+	i.real = 0.0;
+	i.imag = 0.0;
+	while (real_square(i) <= 16.0 && iterations < max_iterations)
+	{
+		i = complex_add(complex_square(i), a);
+		iterations++;
+	}
+	return (iterations);
+}
+
+static void	render_mandelbrot_pixel(t_fractol *fractol,
+			int x, int y, int max_iter)
+{
+	t_complex	c;
+	int			iterations;
+	int			color;
+
+	c = pixel_to_complex_zoom(x, y, fractol);
+	iterations = mandelbrot_iterations(c, max_iter);
+	color = get_color_advanced(iterations, max_iter,
+			fractol->color_scheme, fractol->color_shift);
+	set_pixel(fractol, x, y, color);
+}
+
+static void	render_mandelbrot_row(t_fractol *fractol, int y, int max_iter)
+{
+	int	x;
+
+	x = 0;
+	while (x < fractol->width)
+	{
+		render_mandelbrot_pixel(fractol, x, y, max_iter);
+		x++;
+	}
+}
+
+void	render_mandelbrot(t_fractol *fractol)
+{
+	int	y;
+	int	max_iter;
+
+	y = 0;
+	max_iter = get_optimal_iterations(fractol->zoom);
+	while (y < fractol->height)
+	{
+		render_mandelbrot_row(fractol, y, max_iter);
+		y++;
+	}
+	mlx_put_image_to_window(fractol->mlx, fractol->win, fractol->img, 0, 0);
+}
