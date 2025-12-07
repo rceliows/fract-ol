@@ -1,8 +1,8 @@
 #ifndef MAIN_H
 # define MAIN_H
 
+# include "../libft/inc/libft.h"
 # include "../minilibx-linux/mlx.h"
-# include "../libft/inc/ft_printf.h"
 # include <stdlib.h>
 # include <math.h>
 

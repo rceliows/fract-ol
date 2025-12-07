@@ -2,18 +2,20 @@
 NAME			= fractol
 
 # Directories
-LIBFT			= ./libft/libft.a
-MINILIBX		= ./minilibx-linux/libmlx_Linux.a
+LIBFT_DIR		= ./libft
+LIBFT			= $(LIBFT_DIR)/libft.a
+MINILIBX_DIR		= ./minilibx-linux
+MINILIBX		= $(MINILIBX_DIR)/libmlx_Linux.a
 INC				= inc/
 SRC_DIR			= src/
 OBJ_DIR			= obj/
 
 # Compiler and Flags
 CC				= cc
-CFLAGS			= -Wall -Wextra -Werror -I$(INC) -I./minilibx-linux
+CFLAGS			= -Wall -Wextra -Werror -I$(INC) -I$(LIBFT_DIR)/inc -I$(MINILIBX_DIR)
 RM				= rm -f
 AR				= ar rcs
-LIBS			= $(MINILIBX) -lX11 -lXext -lm
+LIBS			= $(MINILIBX) $(LIBFT) -lX11 -lXext -lm
 
 # Source Files
 FRACTOL			=	$(SRC_DIR)main.c \
@@ -35,42 +37,59 @@ SRCS 			= $(FRACTOL)
 OBJ 			= $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
 
 # Build rules
-start:				
-				@make all
-
-$(LIBFT):
-				@make -C ./libft
-
-# Check if minilibx-linux directory exists, if not clone it
-./minilibx-linux:
-				@echo "MinilibX not found. Cloning from repository..."
-				@git clone https://github.com/42paris/minilibx-linux.git
-				@echo "MinilibX cloned successfully!"
-
-$(MINILIBX):		./minilibx-linux
-				@echo "Building MinilibX..."
-				@make -C ./minilibx-linux
-				@echo "MinilibX built successfully!"
-
 all: 			$(NAME)
 
-$(NAME): 		$(OBJ) $(LIBFT) $(MINILIBX)
-				@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(LIBS)
+$(NAME): 		$(LIBFT) $(MINILIBX) $(OBJ)
+			@echo "Linking $(NAME)..."
+			@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBS)
+			@echo "Build complete!"
+
+# Check if libft directory exists, if not clone it
+$(LIBFT_DIR):
+			@echo "libft not found. Cloning from repository..."
+			@git clone git@github.com:rceliows/libft.git $(LIBFT_DIR)
+			@echo "libft cloned successfully!"
+
+$(LIBFT):		$(LIBFT_DIR)
+			@echo "Building libft..."
+			@make -C $(LIBFT_DIR)
+			@echo "libft built successfully!"
+
+# Check if minilibx-linux directory exists, if not clone it
+$(MINILIBX_DIR):
+			@echo "MinilibX not found. Cloning from repository..."
+			@git clone https://github.com/42paris/minilibx-linux.git $(MINILIBX_DIR)
+			@echo "MinilibX cloned successfully!"
+
+$(MINILIBX):		$(MINILIBX_DIR)
+			@echo "Building MinilibX..."
+			@make -C $(MINILIBX_DIR)
+			@echo "MinilibX built successfully!"
 
 # Compile object files from source files
-$(OBJ_DIR)%.o:	$(SRC_DIR)%.c ./minilibx-linux
-				@mkdir -p $(@D)
-				@$(CC) $(CFLAGS) -c $< -o $@
+$(OBJ_DIR)%.o:		$(SRC_DIR)%.c
+			@mkdir -p $(@D)
+			@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-				@$(RM) -r $(OBJ_DIR)
-				@make clean -C ./libft
+			@echo "Cleaning object files..."
+			@$(RM) -r $(OBJ_DIR)
+			@if [ -d "$(LIBFT_DIR)" ]; then make clean -C $(LIBFT_DIR); fi
+			@if [ -d "$(MINILIBX_DIR)" ]; then make clean -C $(MINILIBX_DIR) 2>/dev/null || true; fi
+			@echo "Clean complete!"
 
 fclean: 		clean
-				@$(RM) $(NAME)
-				@$(RM) $(LIBFT)
+			@echo "Removing executables..."
+			@$(RM) $(NAME)
+			@if [ -d "$(LIBFT_DIR)" ]; then $(RM) $(LIBFT); fi
+			@echo "Full clean complete!"
+
+fcleanall:		fclean
+			@echo "Removing library directories..."
+			@if [ -d "$(LIBFT_DIR)" ]; then rm -rf $(LIBFT_DIR); echo "Removed $(LIBFT_DIR)"; fi
+			@if [ -d "$(MINILIBX_DIR)" ]; then rm -rf $(MINILIBX_DIR); echo "Removed $(MINILIBX_DIR)"; fi
+			@echo "Full clean with libraries complete!"
 
 re: 			fclean all
 
-# Phony targets represent actions not files
-.PHONY: 		start all clean fclean re
+reall:			fcleanall all
